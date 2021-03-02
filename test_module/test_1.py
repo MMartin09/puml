@@ -13,6 +13,7 @@ class Test1:
 class Test11:
 
     test1: str = ""
+    test2: Test1
 
     def __init__(self):
         pass
