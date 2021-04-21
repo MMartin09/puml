@@ -35,7 +35,7 @@ def main():
             module_type = getattr(module, key)
 
             if inspect.isclass(module_type):
-                print(f"{key} is a class in module {module.__name__}")
+                #print(f"{key} is a class in module {module.__name__}")
 
                 attr = []
                 vars = test(module_type)[0][1]
@@ -49,6 +49,8 @@ def main():
                     # Python default
                     accessor = Accessor.Public
 
+#                    name = k
+
                     if name.startswith("__"):
                         name = name[2:]
                         accessor = Accessor.Private
@@ -56,9 +58,10 @@ def main():
                         name = name[1:]
                         accessor = Accessor.Protected
 
-                    attr.append(Attr_Template.render(accessor=accessor.value, name=key, type=val))
+                    attr.append(Attr_Template.render(accessor=accessor.value, name=name, type=val))
 
                 print(Class_Template.render(class_name=key, attrs=attr))
+                print("")
 
     #
     # for _, name, is_pkg in pkgutil.walk_packages([module_path], f"test_module."):
