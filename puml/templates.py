@@ -1,7 +1,7 @@
 from mako.template import Template
 
 Attr_Template = Template(
-"""${name}: ${type}"""
+"""${accessor} ${name}: ${type}"""
 )
 
 Class_Template = Template('\n'.join((

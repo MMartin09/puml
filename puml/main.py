@@ -30,6 +30,29 @@ def main():
             if inspect.isclass(module_type):
                 print(f"{key} is a class in module {module.__name__}")
 
+                attr = []
+                vars = test(module_type)[0][1]
+                vars = dict(vars)
+
+                for name, value in vars.items():
+                    pos_1 = str(value).find("'", 0)
+                    pos_2 = str(value).find("'", pos_1+1)
+                    val = str(value)[pos_1+1:pos_2]
+
+                    access = "public"
+
+                    if name.startswith("__"):
+                        name = name[2:]
+                        access = "private"
+                    elif name.startswith("_"):
+                        name = name[1:]
+                        access = "protected"
+
+                    attr.append(Attr_Template.render(accessor=access, name=key, type=val))
+
+                print(Class_Template.render(class_name=key, attrs=attr))
+
+
     #
     # for _, name, is_pkg in pkgutil.walk_packages([module_path], f"test_module."):
     #     if not is_pkg:
