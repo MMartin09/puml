@@ -4,9 +4,16 @@ import pkgutil
 import inspect
 from types import ModuleType
 import os
+from enum import Enum
 
 from puml.templates import *
 from puml.module_helper import get_modules
+
+
+class Accessor(Enum):
+    Public = "+"
+    Protected = "#"
+    Private = "-"
 
 
 def test(cls):
@@ -39,19 +46,19 @@ def main():
                     pos_2 = str(value).find("'", pos_1+1)
                     val = str(value)[pos_1+1:pos_2]
 
-                    access = "public"
+                    # Python default
+                    accessor = Accessor.Public
 
                     if name.startswith("__"):
                         name = name[2:]
-                        access = "private"
+                        accessor = Accessor.Private
                     elif name.startswith("_"):
                         name = name[1:]
-                        access = "protected"
+                        accessor = Accessor.Protected
 
-                    attr.append(Attr_Template.render(accessor=access, name=key, type=val))
+                    attr.append(Attr_Template.render(accessor=accessor.value, name=key, type=val))
 
                 print(Class_Template.render(class_name=key, attrs=attr))
-
 
     #
     # for _, name, is_pkg in pkgutil.walk_packages([module_path], f"test_module."):
