@@ -1,12 +1,21 @@
-
 import importlib
 import pkgutil
 import os
+import inspect
 from types import ModuleType
 from typing import List
 
 
 def get_modules(path):
+    """
+
+    Args:
+        path (str):
+
+    Returns:
+
+    """
+
     # List holding all available modules
     modules: List[ModuleType] = []
 
@@ -20,3 +29,25 @@ def get_modules(path):
             modules.append(module)
 
     return modules
+
+
+def get_module_attributes(cls) -> dict:
+    """Get user defined attributes.
+
+    Source:
+        https://stackoverflow.com/a/4241225/4685974
+
+    Args:
+        cls:
+
+    Returns:
+
+    """
+
+    boring = dir(type("dummy", (object,), {}))
+    attributes = [item for item in inspect.getmembers(cls) if item[0] not in boring]
+
+    attributes = attributes[0][1]
+    attributes = dict(attributes)
+
+    return attributes

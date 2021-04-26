@@ -1,26 +1,14 @@
-
 import importlib
 import pkgutil
 import inspect
 from types import ModuleType
 import os
-from enum import Enum
-
 from puml.templates import *
-from puml.module_helper import get_modules
+from puml.accessor import Accessor
+from puml.module_helper import get_modules, get_module_attributes
 
 
-class Accessor(Enum):
-    Public = "+"
-    Protected = "#"
-    Private = "-"
 
-
-def test(cls):
-    boring = dir(type("dummy", (object, ), {}))
-    return [item
-            for item in inspect.getmembers(cls)
-            if item[0] not in boring]
 
 
 def main():
@@ -35,21 +23,18 @@ def main():
             module_type = getattr(module, key)
 
             if inspect.isclass(module_type):
-                #print(f"{key} is a class in module {module.__name__}")
-
                 attr = []
-                vars = test(module_type)[0][1]
-                vars = dict(vars)
+                vars = get_module_attributes(module_type)
 
                 for name, value in vars.items():
                     pos_1 = str(value).find("'", 0)
-                    pos_2 = str(value).find("'", pos_1+1)
-                    val = str(value)[pos_1+1:pos_2]
+                    pos_2 = str(value).find("'", pos_1 + 1)
+                    val = str(value)[pos_1 + 1 : pos_2]
 
                     # Python default
                     accessor = Accessor.Public
 
-#                    name = k
+                    #                    name = k
 
                     if name.startswith("__"):
                         name = name[2:]
@@ -58,7 +43,11 @@ def main():
                         name = name[1:]
                         accessor = Accessor.Protected
 
-                    attr.append(Attr_Template.render(accessor=accessor.value, name=name, type=val))
+                    attr.append(
+                        Attr_Template.render(
+                            accessor=accessor.value, name=name, type=val
+                        )
+                    )
 
                 print(Class_Template.render(class_name=key, attrs=attr))
                 print("")
@@ -116,5 +105,5 @@ def main():
     # #     print("---------------------\n")
 
 
-if __name__ == '__main__':
+if __name__ == "__main__":
     main()

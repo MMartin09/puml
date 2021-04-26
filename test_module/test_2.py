@@ -1,4 +1,3 @@
-
 class Test2:
 
     test1: str = ""
