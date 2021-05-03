@@ -1,0 +1,13 @@
+site_name: Python 2 PlantUML
+theme:
+  name: material
+
+nav:
+  - "index.md"
+  - "commands.md"
+  - "examples.md"
+  - "contributing.md"
+
+markdown_extensions:
+  - pymdownx.tabbed
+  - pymdownx.superfences
